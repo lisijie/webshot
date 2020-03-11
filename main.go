@@ -15,16 +15,17 @@ import (
 
 var (
 	// 默认设置
-	addr      = ":80"                   // http监听地址
-	debug     = false                   // 是否debug
-	remoteUrl = "http://127.0.0.1:9222" // headless-shell 地址
-	connLimit = 20                      // 并发数限制
-	timeout   = time.Second * 30        // 处理超时设置
-	startTime = time.Now()
+	addr        = ":80"                   // http监听地址
+	debug       = false                   // 是否debug
+	remoteUrl   = "http://127.0.0.1:9222" // headless-shell 地址
+	connLimit   = 20                      // 并发数限制
+	timeout     = time.Second * 30        // 处理超时设置
+	startTime   = time.Now()              // 启动时间
+	accessToken = ""                      // 访问token
 )
 
 func main() {
-	if v, ok := os.LookupEnv("HTTP_ADDR"); ok && v == "true" {
+	if v, ok := os.LookupEnv("HTTP_ADDR"); ok {
 		addr = v
 	}
 	if v, ok := os.LookupEnv("DEBUG"); ok && v == "true" {
@@ -38,6 +39,10 @@ func main() {
 			connLimit = n
 		}
 	}
+	if v, ok := os.LookupEnv("ACCESS_TOKEN"); ok {
+		accessToken = v
+	}
+
 	if remoteUrl != "" {
 		u, err := toIpUrl(remoteUrl)
 		if err != nil {

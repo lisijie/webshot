@@ -20,6 +20,17 @@ type Handler struct {
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if accessToken != "" {
+		token := r.Header.Get("x-access-token")
+		if token == "" {
+			token = r.URL.Query().Get("access_token")
+		}
+		if token != accessToken {
+			w.WriteHeader(403)
+			w.Write([]byte("access token invalid"))
+			return
+		}
+	}
 	switch r.URL.Path {
 	case "/":
 		h.process(w, r)

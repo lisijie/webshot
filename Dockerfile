@@ -1,4 +1,4 @@
-FROM golang:1.14-alpine as builder
+FROM golang:1.14 as builder
 WORKDIR /root
 COPY . /root/
 RUN go build -mod=vendor -o webshot
